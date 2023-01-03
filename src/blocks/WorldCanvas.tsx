@@ -10,7 +10,6 @@ const Block = styled.div`
 `
 
 const Canvas = styled.canvas`
-    border: 1px solid red;
     width: 100%;
     height: 100%;
 `

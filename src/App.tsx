@@ -11,18 +11,25 @@ const Container = styled.div`
   width: 100vw;
   height: 100vh;
   background-color: #ddd;
+  display: flex;
+  flex-direction: column;
+`
+
+const TopRow = styled(Row)`
+  flex: 1;
 `
 
 const BottomRow = styled(Row)` 
-  height: 100%;
+  flex: 9;
 `
+
 
 function App() {
   return (
     <Container>
-      <Row>
+      <TopRow>
         <ActionBar />
-      </Row>
+      </TopRow>
       <BottomRow>
         <OptionsSideBar />
         <WorldCanvas />
