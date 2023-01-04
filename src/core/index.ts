@@ -25,14 +25,16 @@ class Engine {
         this.render = this.render.bind(this);
     }
     
-    setCanvas(canvas: HTMLCanvasElement | null) {
+    setCanvas(canvas: HTMLCanvasElement) {
         this.canvas = canvas;
         this.camera = new Camera(this.canvas);
     }
 
     private renderLoop(ctx: CanvasRenderingContext2D) {
         if (this.canvas) {
-            const { width, height } = this.canvas.getBoundingClientRect();
+            // const { width, height } = this.canvas.getBoundingClientRect();
+            const width = this.canvas.width;
+            const height = this.canvas.height;
             ctx.fillStyle = 'green';
             ctx.fillRect(0, 0, width, height);
             this.balls.forEach(ball => {
