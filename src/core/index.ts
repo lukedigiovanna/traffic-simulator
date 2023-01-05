@@ -37,20 +37,23 @@ class Engine {
             const height = this.canvas.height;
             ctx.fillStyle = 'green';
             ctx.fillRect(0, 0, width, height);
-            this.balls.forEach(ball => {
-                if (this.canvas) {
-                    ctx.fillStyle = ball.color;
-                    ctx.fillRect(ball.x - ball.size / 2, ball.y - ball.size / 2, ball.size, ball.size);
-                    ball.x += ball.vx;
-                    ball.y += ball.vy;
-                    if (ball.x < 0 || ball.x > width / 2) {
-                        ball.vx *= -1;
-                    }
-                    if (ball.y < 0 || ball.y > height / 2) {
-                        ball.vy *= -1;
-                    }
+            for (let i = 0; i < this.balls.length; i++) {
+                const ball = this.balls[i];
+                ctx.fillStyle = ball.color;
+                ctx.fillRect(ball.x - ball.size / 2, ball.y - ball.size / 2, ball.size, ball.size);
+                ball.x += ball.vx;
+                ball.y += ball.vy;
+                if (ball.x < 0 || ball.x > width) {
+                    ball.vx *= -1;
                 }
-            })
+                if (ball.y < 0 || ball.y > height) {
+                    ball.vy *= -1;
+                }
+                if (ball.x < 0) ball.x = 0;
+                if (ball.x > width) ball.x = width;
+                if (ball.y < 0) ball.y = 0;
+                if (ball.y > height) ball.y = height;
+            }
         }
     }
 

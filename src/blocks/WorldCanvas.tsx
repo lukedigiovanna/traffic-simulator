@@ -5,8 +5,8 @@ import core from '../core';
 const Block = styled.div`
     background-color: black;
     flex: 1;
-    width: 100%;
-    height: 100%;
+    /* width: 100%;
+    height: 100%; */
 `
 
 const Canvas = styled.canvas`
@@ -24,10 +24,11 @@ export const WorldCanvas = () => {
         setInterval(() => {
             console.log("Update");
             if (blockRef.current && canvasRef.current) {
-                const { width, height } = blockRef.current.getBoundingClientRect();
-                console.log(width, height);
-                canvasRef.current.width = width - 4;
-                canvasRef.current.height = height - 4;
+                // const { width, height } = blockRef.current.getBoundingClientRect();
+                // console.log(width, height);
+                const [width, height] = [window.innerWidth - 230, window.innerHeight - 84];
+                canvasRef.current.width = width;
+                canvasRef.current.height = height;
             }
         }, 500);
     }, []);
