@@ -1,8 +1,8 @@
 import { Point } from "../utils/types";
 
 class Camera {
-    private position: Point = { x: 0, y: 0 };
-    private aspectRatio: number = 1;
+    public position: Point = { x: 0, y: 0 };
+    public zoom: number = 1;
     private canvas: HTMLCanvasElement;
     private ctx: CanvasRenderingContext2D;
 
@@ -12,9 +12,19 @@ class Camera {
     }
 
     refresh(color: string) {
-        const { width, height } = this.canvas.getBoundingClientRect();
-        this.aspectRatio = width / height;
-        
+        this.ctx.fillStyle = color;
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+
+    fillRect(x: number, y: number, width: number, height: number, color: string) {
+        this.ctx.fillStyle = color;
+        // use the scale and position of the camera to calculate the pixel space coordinates
+        this.ctx.fillRect(
+            (x - this.position.x) * this.zoom,
+            (y - this.position.y) * this.zoom,
+            width * this.zoom,
+            height * this.zoom
+        );
     }
 }
 

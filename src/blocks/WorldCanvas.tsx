@@ -3,7 +3,7 @@ import React from "react"
 import core from '../core';
 
 const Block = styled.div`
-    background-color: black;
+    background-color: red;
     flex: 1;
     /* width: 100%;
     height: 100%; */
@@ -18,19 +18,19 @@ export const WorldCanvas = () => {
     const canvasRef = React.useRef<HTMLCanvasElement>(null);
     const blockRef = React.useRef<HTMLDivElement>(null);
 
+    const resizeCanvas = function () {
+        if (blockRef.current && canvasRef.current) {
+            const [width, height] = [window.innerWidth - 230, window.innerHeight - 84];
+            canvasRef.current.width = width;
+            canvasRef.current.height = height;
+        }
+    }
+
     React.useEffect(() => {
         core.setCanvas(canvasRef.current as HTMLCanvasElement);
         window.requestAnimationFrame(core.render);
-        setInterval(() => {
-            console.log("Update");
-            if (blockRef.current && canvasRef.current) {
-                // const { width, height } = blockRef.current.getBoundingClientRect();
-                // console.log(width, height);
-                const [width, height] = [window.innerWidth - 230, window.innerHeight - 84];
-                canvasRef.current.width = width;
-                canvasRef.current.height = height;
-            }
-        }, 500);
+        resizeCanvas();
+        window.addEventListener("resize", resizeCanvas);
     }, []);
 
     return (
