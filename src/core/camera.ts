@@ -11,6 +11,14 @@ class Camera {
         this.ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
     }
 
+    rotate(degrees: number) {
+        // rotate about the center of the canvas
+        this.ctx.translate(this.canvas.width / 2, this.canvas.height / 2);
+        this.ctx.rotate(degrees * Math.PI / 180);
+        this.ctx.translate(-this.canvas.width / 2, -this.canvas.height / 2);
+        
+    }
+
     refresh(color: string) {
         this.ctx.fillStyle = color;
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
@@ -25,6 +33,22 @@ class Camera {
             width * this.zoom,
             height * this.zoom
         );
+    }
+
+    drawBezierCurve(start: Point, end: Point, control: Point, color: string, width: number = 1) {
+        this.ctx.strokeStyle  = color;
+        this.ctx.lineWidth = width;
+        this.ctx.beginPath();
+        this.ctx.moveTo((start.x - this.position.x) * this.zoom, (start.y - this.position.y) * this.zoom);
+        this.ctx.bezierCurveTo(
+            (control.x - this.position.x) * this.zoom,
+            (control.y - this.position.y) * this.zoom,
+            (control.x - this.position.x) * this.zoom,
+            (control.y - this.position.y) * this.zoom,
+            (end.x - this.position.x) * this.zoom,
+            (end.y - this.position.y) * this.zoom
+        );
+        this.ctx.stroke();
     }
 }
 

@@ -1,3 +1,6 @@
+import { Point } from "../utils/types";
+import { Camera } from "./camera";
+
 /**
  * Defines all code responsible for managing a system of roads and the vehicles
  * contained on the road.
@@ -27,6 +30,60 @@ Nodes also need to contain information about the connections among lanes
 among adjacent RoadEdge's
 */
 
+/**
+ * A road segment is a section of the road defined by a quadratic bezier curve.
+ */
+export class RoadSegment {
+    public readonly control: Point;
+    public readonly start: Point;
+    public readonly end: Point;
+    public readonly length: number;
+
+    constructor(start: Point, end: Point, control: Point) {
+        this.start = start;
+        this.end = end;
+        this.control = control;
+        this.length = this.calculateLength();
+    }
+
+    // calculates the length of the road segment
+    private calculateLength(): number {
+        // TODO
+        return 0;
+    }
+}
+
+export class Road {
+    private segments: RoadSegment[];
+    private length: number;
+    private speedLimit: number;
+
+    constructor() {
+        this.segments = [];
+        this.length = 0;
+        this.speedLimit = 0;
+    }
+
+    // adds a segment to the road
+    addSegment(segment: RoadSegment) {
+        // make sure the segment is connected to the last segment
+        if (this.segments.length > 0) {
+            const lastSegment = this.segments[this.segments.length - 1];
+            if (lastSegment.end.x !== segment.start.x || lastSegment.end.y !== segment.start.y) {
+                throw new Error('Road segments must be connected');
+            }
+        }
+        this.segments.push(segment);
+        this.length += segment.length;
+    }
+
+    render(camera: Camera) {
+        for (const segment of this.segments) {
+            camera.drawBezierCurve(segment.start, segment.end, segment.control, 'red', 5);
+        }
+    }
+}
+
 type LaneType = 'left' | 'straight' | 'right';
 
 class RoadEdge {
@@ -38,6 +95,10 @@ class RoadEdge {
 }
 
 class RoadNode {
+
+}
+
+class Network {
 
 }
 
