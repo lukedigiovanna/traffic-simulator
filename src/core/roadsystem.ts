@@ -34,15 +34,17 @@ among adjacent RoadEdge's
  * A road segment is a section of the road defined by a quadratic bezier curve.
  */
 export class RoadSegment {
-    public readonly control: Point;
+    public readonly control1: Point;
+    public readonly control2: Point;
     public readonly start: Point;
     public readonly end: Point;
     public readonly length: number;
 
-    constructor(start: Point, end: Point, control: Point) {
+    constructor(start: Point, end: Point, control1: Point, control2: Point) {
         this.start = start;
         this.end = end;
-        this.control = control;
+        this.control1 = control1;
+        this.control2 = control2;
         this.length = this.calculateLength();
     }
 
@@ -79,7 +81,13 @@ export class Road {
 
     render(camera: Camera) {
         for (const segment of this.segments) {
-            camera.drawBezierCurve(segment.start, segment.end, segment.control, 'red', 5);
+            camera.drawBezierCurve(
+                segment.start,
+                segment.end, 
+                segment.control1, 
+                segment.control2, 
+            'red', 5);
+            camera.drawBezierCurve(segment.start, segment.end, segment.control1, segment.control2, 'red', 5);
         }
     }
 }

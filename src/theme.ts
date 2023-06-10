@@ -6,7 +6,7 @@ export default {
     },
 
     fonts: {
-        primary: "serif",
+        primary: "Arial",
         secondary: "sans-serif"
     }
 };

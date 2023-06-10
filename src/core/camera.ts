@@ -35,16 +35,28 @@ class Camera {
         );
     }
 
-    drawBezierCurve(start: Point, end: Point, control: Point, color: string, width: number = 1) {
+    fillCircle(x: number, y: number, radius: number, color: string) {
+        this.ctx.fillStyle = color;
+        this.ctx.beginPath();
+        this.ctx.arc(
+            (x - this.position.x) * this.zoom,
+            (y - this.position.y) * this.zoom, 
+            radius * this.zoom, 
+            0, 2 * Math.PI
+        );
+        this.ctx.fill();
+    }
+
+    drawBezierCurve(start: Point, end: Point, control1: Point, control2: Point, color: string, width: number = 1) {
         this.ctx.strokeStyle  = color;
         this.ctx.lineWidth = width;
         this.ctx.beginPath();
         this.ctx.moveTo((start.x - this.position.x) * this.zoom, (start.y - this.position.y) * this.zoom);
         this.ctx.bezierCurveTo(
-            (control.x - this.position.x) * this.zoom,
-            (control.y - this.position.y) * this.zoom,
-            (control.x - this.position.x) * this.zoom,
-            (control.y - this.position.y) * this.zoom,
+            (control1.x - this.position.x) * this.zoom,
+            (control1.y - this.position.y) * this.zoom,
+            (control2.x - this.position.x) * this.zoom,
+            (control2.y - this.position.y) * this.zoom,
             (end.x - this.position.x) * this.zoom,
             (end.y - this.position.y) * this.zoom
         );

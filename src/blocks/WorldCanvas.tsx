@@ -27,15 +27,17 @@ export const WorldCanvas = () => {
     }
 
     React.useEffect(() => {
-        core.setCanvas(canvasRef.current as HTMLCanvasElement);
-        window.requestAnimationFrame(core.render);
-        resizeCanvas();
-        window.addEventListener("resize", resizeCanvas);
+        window.onload = () => {
+            core.setCanvas(canvasRef.current as HTMLCanvasElement);
+            window.requestAnimationFrame(core.render);
+            resizeCanvas();
+            window.addEventListener("resize", resizeCanvas);
+        }
     }, []);
 
     return (
         <Block ref={blockRef}>
-            <Canvas width={600} height={600} ref={canvasRef}>
+            <Canvas ref={canvasRef} tabIndex={0}>
 
             </Canvas>
         </Block>

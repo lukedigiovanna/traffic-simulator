@@ -1,24 +1,34 @@
 import { Camera } from "./camera";
 import { Point } from "../utils/types";
 import { Road, RoadSegment } from "./roadsystem";
+import { Tool, toolClick, toolRender } from "./toolmanager";
 
-class Engine {
+export type Keyboard = Map<string, boolean>;
+
+export class Engine {
     private canvas: HTMLCanvasElement | null = null;
     private camera: Camera | null = null;
-    private mousePosition: Point | null = null;
+    private mousePosition: Point = {x: 0, y: 0};
     private mouseDown: boolean = false;
+    private keyboard: Keyboard = new Map();
 
-    private road: Road;
+    private _tool: Tool = null;
+
+    private roads: Road[] = [];
 
     constructor() {
         this.render = this.render.bind(this);
-        this.road = new Road();
-        this.road.addSegment(new RoadSegment({ x: 0, y: 0 }, { x: 100, y: 0 }, { x: 50, y: 50 }));
     }
     
     setCanvas(canvas: HTMLCanvasElement) {
         this.canvas = canvas;
         this.camera = new Camera(this.canvas);
+        this.canvas?.addEventListener("keydown", (e: KeyboardEvent) => {
+            this.keyboard.set(e.key, true);
+        });
+        this.canvas?.addEventListener("keyup", (e: KeyboardEvent) => {
+            this.keyboard.set(e.key, false);
+        });
         this.canvas?.addEventListener("mousemove", (e: MouseEvent) => {
             if (this.mousePosition && this.mouseDown) {
                 if (e.buttons === 1) {
@@ -40,6 +50,11 @@ class Engine {
         })
         this.canvas?.addEventListener("mousedown", (e: MouseEvent) => {
             this.mouseDown = true;
+            const mousePositionInWorld = {
+                x: (e.clientX - this.canvas!.offsetLeft) / this.camera!.zoom + this.camera!.position.x,
+                y: (e.clientY - this.canvas!.offsetTop) / this.camera!.zoom + this.camera!.position.y
+            };
+            toolClick(this, mousePositionInWorld, this.keyboard);
         });
         this.canvas?.addEventListener("mouseup", (e: MouseEvent) => {
             this.mouseDown = false;
@@ -61,11 +76,31 @@ class Engine {
         });
     }
 
+    setTool(tool: Tool) {
+        this._tool = tool;
+    }
+
+    get tool() {
+        return this._tool;
+    }
+
+    add(segment: RoadSegment) {
+        const road = new Road();
+        road.addSegment(segment);
+        this.roads.push(road);
+    }
 
     render() {
         if (this.camera) {
             this.camera.refresh("black");
-            this.road.render(this.camera);
+            for (let i = 0; i < this.roads.length; i++) {
+                this.roads[i].render(this.camera);
+            }
+            const worldPos = {
+                x: (this.mousePosition.x - this.canvas!.offsetLeft) / this.camera!.zoom + this.camera!.position.x,
+                y: (this.mousePosition.y - this.canvas!.offsetTop) / this.camera!.zoom + this.camera!.position.y
+            };
+            toolRender(this.tool, this.camera, worldPos);
         }
         window.requestAnimationFrame(this.render);
     }
